@@ -1,11 +1,11 @@
 const { Hello } = require('./Hello');
-const { PostResolver } = require('./Post');
+const { PostResolvers } = require('./Post');
 const { scalarDate } = require('./Date');
 
 const resolvers = {
 	Query: {
 		...Hello.Query,
-		...PostResolver.Query,
+		...PostResolvers.Query,
 	},
 	Date: scalarDate,
 };
