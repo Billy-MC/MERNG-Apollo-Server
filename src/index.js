@@ -8,9 +8,9 @@ const http = require('http');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const { resolvers } = require('./src/resolvers');
+const { resolvers } = require('./resolvers');
 
-const schema = loadSchemaSync('./src/**/*.graphql', {
+const schema = loadSchemaSync('./**/*.graphql', {
 	loaders: [new GraphQLFileLoader()],
 });
 
