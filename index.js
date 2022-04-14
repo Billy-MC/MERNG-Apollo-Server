@@ -6,16 +6,13 @@ const { addResolversToSchema } = require('@graphql-tools/schema');
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
-const { Hello } = require('./src/resolvers/Hello');
 require('dotenv').config();
+
+const { resolvers } = require('./src/resolvers');
 
 const schema = loadSchemaSync('./src/**/*.graphql', {
 	loaders: [new GraphQLFileLoader()],
 });
-
-const resolvers = {
-	...Hello,
-};
 
 const schemaWithResolvers = addResolversToSchema({
 	schema,
@@ -31,7 +28,9 @@ async function startApolloServer(schema) {
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 	});
 
-	await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true });
+	await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }, () => {
+		console.log('🚀 MongoDB ready Connected!');
+	});
 
 	await server.start();
 	server.applyMiddleware({

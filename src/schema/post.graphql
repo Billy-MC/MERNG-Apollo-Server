@@ -1,0 +1,12 @@
+scalar Date
+
+type Query {
+	getPosts: [Post]
+}
+
+type Post {
+	id: ID!
+	body: String!
+	createdAt: Date!
+	username: String!
+}
