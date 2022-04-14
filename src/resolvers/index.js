@@ -1,6 +1,6 @@
-const { Hello } = require('./Hello');
-const { PostResolvers } = require('./Post');
-const { scalarDate } = require('./Date');
+const { Hello } = require('./hello');
+const { PostResolvers } = require('./post');
+const { scalarDate } = require('./scalar-date');
 
 const resolvers = {
 	Query: {
