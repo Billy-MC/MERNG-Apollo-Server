@@ -2,9 +2,10 @@ const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const express = require('express');
 const http = require('http');
-const mongoose = require('mongoose');
+
 require('dotenv').config();
 
+const connectToMongoDB = require('./database/mongodb');
 const logger = require('./config/logger');
 
 async function startApolloServer(schema) {
@@ -16,9 +17,7 @@ async function startApolloServer(schema) {
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 	});
 
-	await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }, () => {
-		logger.info('🚀 MongoDB ready Connected!');
-	});
+	connectToMongoDB();
 
 	await server.start();
 	server.applyMiddleware({
