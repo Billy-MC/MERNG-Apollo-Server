@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const { loadSchemaSync } = require('@graphql-tools/load');
 const { GraphQLFileLoader } = require('@graphql-tools/graphql-file-loader');
@@ -8,14 +8,15 @@ const http = require('http');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
+const logger = require('./config/logger');
 const { resolvers } = require('./resolvers');
 
-const schema = loadSchemaSync('./**/*.graphql', {
+const combinedSchema = loadSchemaSync('./**/*.graphql', {
 	loaders: [new GraphQLFileLoader()],
 });
 
 const schemaWithResolvers = addResolversToSchema({
-	schema,
+	schema: combinedSchema,
 	resolvers,
 });
 
@@ -29,7 +30,7 @@ async function startApolloServer(schema) {
 	});
 
 	await mongoose.connect(process.env.MONGODB, { useNewUrlParser: true }, () => {
-		console.log('🚀 MongoDB ready Connected!');
+		logger.info('🚀 MongoDB ready Connected!');
 	});
 
 	await server.start();
@@ -39,7 +40,7 @@ async function startApolloServer(schema) {
 	});
 
 	await httpServer.listen({ port: 4000 });
-	console.log(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+	logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
 }
 
 startApolloServer(schemaWithResolvers);
