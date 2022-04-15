@@ -6,8 +6,12 @@
 		"node": true
 	},
 	"extends": ["airbnb-base", "prettier", "eslint:recommended"],
+	"files": ["*.graphql"],
+	"parser": "@graphql-eslint/eslint-plugin",
+	"plugins": ["@graphql-eslint"],
 	"parserOptions": {
-		"ecmaVersion": "latest"
+		"ecmaVersion": "latest",
+		"operations": "./src/**/*.graphql"
 	},
 	"rules": {
 		"no-unused-vars": "warn"
