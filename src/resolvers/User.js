@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { UserInputError } = require('apollo-server-express');
+const { v4: uuidV4 } = require('uuid');
 
 const User = require('../models/User');
 const { generateToken } = require('../utils/jwt');
@@ -56,12 +57,12 @@ const UserResolvers = {
 				});
 
 				const res = await user.save();
+				const createdUser = res.toJSON();
 				const token = generateToken(user);
+
 				return {
-					id: res.id,
-					username: res.username,
-					email: res.email,
-					createdAt: res.createdAt,
+					...createdUser,
+					id: createdUser._id,
 					token,
 				};
 			} catch (err) {
@@ -71,13 +72,15 @@ const UserResolvers = {
 		},
 		login: async (_, args) => {
 			const {
-				loginInput: { username, password },
+				loginInput: { username, email, password },
 			} = args;
-			const { errors, valid } = validateLoginInput(username, password);
-			if (!valid) throw new Error('Error', { errors });
+			const { errors, valid } = validateLoginInput(username, email, password);
+			if (!valid) throw new UserInputError('Error', { errors });
+
+			const userPayload = email ? { email } : { username };
 
 			try {
-				const user = await User.findOne({ username }).select('+password');
+				const user = await User.findOne(userPayload).select('+password');
 				if (!user) {
 					errors.general = 'User not found';
 					throw new UserInputError('User not found', { errors });
@@ -90,11 +93,11 @@ const UserResolvers = {
 				}
 
 				const token = generateToken(user);
+
+				const loggedInUser = user.toJSON();
 				return {
-					id: user.id,
-					username: user.username,
-					email: user.email,
-					createdAt: user.createdAt,
+					...loggedInUser,
+					id: loggedInUser._id,
 					token,
 				};
 			} catch (err) {

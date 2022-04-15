@@ -10,6 +10,7 @@
 		"ecmaVersion": "latest"
 	},
 	"rules": {
-		"no-unused-vars": "warn"
+		"no-unused-vars": "warn",
+		"no-underscore-dangle": ["error", { "allow": ["_id"] }]
 	}
 }

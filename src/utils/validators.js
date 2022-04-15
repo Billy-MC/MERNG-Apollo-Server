@@ -22,10 +22,14 @@ const validateRegisterInput = (username, email, password, confirmPassword) => {
 	};
 };
 
-const validateLoginInput = (username, password) => {
+const validateLoginInput = (username, email, password) => {
 	const errors = {};
-	if (username.trim() === '') errors.username = 'Username must not be empty';
-	if (password.trim() === '') errors.email = 'Password must not be empty';
+	if (!username && !email) {
+		errors.general = 'Username/Email must not be empty';
+	}
+	if (username?.trim() === '') errors.username = 'Username must not be empty';
+	if (email?.trim() === '') errors.email = 'Email must not be empty';
+	if (password.trim() === '') errors.password = 'Password must not be empty';
 
 	return {
 		errors,

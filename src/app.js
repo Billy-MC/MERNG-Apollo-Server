@@ -30,7 +30,9 @@ async function startApolloServer(schema) {
 	});
 
 	await httpServer.listen({ port: 4000 });
-	logger.info(`🚀 Server ready at http://localhost:4000${server.graphqlPath}`);
+	logger.info(
+		`🚀 Apollo Server ready at http://localhost:4000${server.graphqlPath}`
+	);
 }
 
 module.exports = startApolloServer;
