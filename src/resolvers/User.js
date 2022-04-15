@@ -11,7 +11,7 @@ const logger = require('../config/logger');
 
 const UserResolvers = {
 	Mutation: {
-		register: async (_, args, ctx, info) => {
+		register: async (_, args) => {
 			try {
 				const {
 					registerInput: { username, email, password, confirmPassword },
