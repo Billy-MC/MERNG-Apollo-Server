@@ -15,6 +15,9 @@ async function startApolloServer(schema) {
 	const server = new ApolloServer({
 		schema,
 		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+		cors: true,
+		introspection: true,
+		tracing: true,
 	});
 
 	connectToMongoDB();
@@ -23,6 +26,7 @@ async function startApolloServer(schema) {
 	server.applyMiddleware({
 		app,
 		path: '/',
+		cors: true,
 	});
 
 	await httpServer.listen({ port: 4000 });

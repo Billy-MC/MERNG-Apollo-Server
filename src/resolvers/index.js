@@ -1,13 +1,15 @@
 const { Hello } = require('./hello');
 const { PostResolvers } = require('./post');
-const { scalarDate } = require('./scalar-date');
+const { UserResolvers } = require('./user');
 
 const resolvers = {
 	Query: {
 		...Hello.Query,
 		...PostResolvers.Query,
 	},
-	Date: scalarDate,
+	Mutation: {
+		...UserResolvers.Mutation,
+	},
 };
 
 module.exports = { resolvers };

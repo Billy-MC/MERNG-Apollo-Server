@@ -1,4 +1,4 @@
-scalar Date
+# scalar Date
 
 type Query {
 	getPosts: [Post]
@@ -7,6 +7,6 @@ type Query {
 type Post {
 	id: ID!
 	body: String!
-	createdAt: Date!
+	createdAt: String!
 	username: String!
 }
