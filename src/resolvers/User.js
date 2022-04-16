@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const { UserInputError } = require('apollo-server-express');
-const { v4: uuidV4 } = require('uuid');
 
 const User = require('../models/User');
 const { generateToken } = require('../utils/jwt');

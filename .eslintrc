@@ -12,5 +12,19 @@
 	"rules": {
 		"no-unused-vars": "warn",
 		"no-underscore-dangle": ["error", { "allow": ["_id"] }]
-	}
+	},
+	"overrides": [
+		{
+			"files": ["*.graphql"],
+			"parser": "@graphql-eslint/eslint-plugin",
+			"plugins": ["@graphql-eslint"],
+			"rules": {
+				"@graphql-eslint/known-type-names": "error"
+			},
+			"parserOptions": {
+				"operations": "./src/**/*.graphql",
+				"schema": "./src/**/*.graphql"
+			}
+		}
+	]
 }
