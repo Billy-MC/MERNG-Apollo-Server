@@ -2,6 +2,7 @@
 
 type Query {
 	getPosts: [Post!]
+	getPost(postId: ID!): Post!
 }
 
 type Post {
@@ -9,4 +10,9 @@ type Post {
 	body: String!
 	createdAt: String!
 	username: String!
+}
+
+type Mutation {
+	createPost(body: String!): Post!
+	deletePost(postId: ID!): String!
 }

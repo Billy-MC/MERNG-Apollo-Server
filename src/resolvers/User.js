@@ -61,7 +61,7 @@ const UserResolvers = {
 
 				return {
 					...createdUser,
-					id: createdUser._id,
+					id: res.id,
 					token,
 				};
 			} catch (err) {
@@ -96,7 +96,7 @@ const UserResolvers = {
 				const loggedInUser = user.toJSON();
 				return {
 					...loggedInUser,
-					id: loggedInUser._id,
+					id: user.id,
 					token,
 				};
 			} catch (err) {
