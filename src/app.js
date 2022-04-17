@@ -19,7 +19,6 @@ async function startApolloServer(schema) {
 
 	const wsServer = new WebSocketServer({
 		server: httpServer,
-		path: '/',
 	});
 
 	const serverCleanup = useServer({ schema }, wsServer);
@@ -29,13 +28,11 @@ async function startApolloServer(schema) {
 		plugins: [
 			ApolloServerPluginDrainHttpServer({ httpServer }),
 			{
-				async serverWillStart() {
-					return {
-						async drainServer() {
-							await serverCleanup.dispose();
-						},
-					};
-				},
+				serverWillStart: async () => ({
+					drainServer: async () => {
+						await serverCleanup.dispose();
+					},
+				}),
 			},
 		],
 		cors: true,
@@ -49,12 +46,15 @@ async function startApolloServer(schema) {
 	await server.start();
 	server.applyMiddleware({
 		app,
+		path: '/',
 		cors: true,
 	});
 
-	await httpServer.listen({ port: 4000 });
+	const PORT = 4000;
+
+	await httpServer.listen({ port: PORT });
 	logger.info(
-		`🚀 Apollo Server ready at http://localhost:4000${server.graphqlPath}`
+		`🚀 Apollo Server ready at http://localhost:${PORT}${server.graphqlPath}`
 	);
 }
 
