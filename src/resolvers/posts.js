@@ -1,11 +1,11 @@
 const { PubSub } = require('graphql-subscriptions');
-
 const {
 	AuthenticationError,
 	UserInputError,
 } = require('apollo-server-express');
 
 const Post = require('../models/Post');
+const User = require('../models/User');
 
 const { checkAuth } = require('../utils/check-auth');
 
@@ -91,6 +91,14 @@ const postsResolvers = {
 	Subscription: {
 		newPost: {
 			subscribe: () => pubsub.asyncIterator('NEW_POST'),
+		},
+	},
+	Post: {
+		likeCount: parent => parent.likes.length,
+		commentCount: parent => parent.comments.length,
+		user: async parent => {
+			const user = await User.findById(parent.user);
+			return user;
 		},
 	},
 };

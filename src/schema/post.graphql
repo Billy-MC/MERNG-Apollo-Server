@@ -15,6 +15,7 @@ type Mutation {
 
 type Subscription {
 	newPost: Post!
+	newComment(postId: String): Post!
 }
 
 type Post {
@@ -23,7 +24,10 @@ type Post {
 	createdAt: String!
 	username: String!
 	comments: [Comment!]!
+	commentCount: Int!
 	likes: [Like]!
+	likeCount: Int!
+	user: User!
 }
 type Comment {
 	id: ID!

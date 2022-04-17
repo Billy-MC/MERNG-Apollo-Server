@@ -1,3 +1,4 @@
+const { PubSub, withFilter } = require('graphql-subscriptions');
 const {
 	AuthenticationError,
 	UserInputError,
@@ -5,6 +6,8 @@ const {
 
 const { checkAuth } = require('../utils/check-auth');
 const Post = require('../models/Post');
+
+const pubsub = new PubSub();
 
 const commentsResolvers = {
 	Mutation: {
@@ -29,6 +32,7 @@ const commentsResolvers = {
 				createdAt: new Date().toISOString(),
 			});
 			await post.save();
+			pubsub.publish('NEW_COMMENT', { newComment: post });
 			return post;
 		},
 		deleteComment: async (_, args, context) => {
@@ -53,6 +57,14 @@ const commentsResolvers = {
 			post.comments.splice(commentIndex, 1);
 			await post.save();
 			return post;
+		},
+	},
+	Subscription: {
+		newComment: {
+			subscribe: withFilter(
+				() => pubsub.asyncIterator('NEW_COMMENT'),
+				(payload, variables) => payload.newComment.id === variables.postId
+			),
 		},
 	},
 };

@@ -4,6 +4,9 @@ const { usersResolvers } = require('./users');
 const { commentsResolvers } = require('./comments');
 
 const resolvers = {
+	Post: {
+		...postsResolvers.Post,
+	},
 	Query: {
 		...helloResolvers.Query,
 		...postsResolvers.Query,
@@ -15,6 +18,7 @@ const resolvers = {
 	},
 	Subscription: {
 		...postsResolvers.Subscription,
+		...commentsResolvers.Subscription,
 	},
 };
 
