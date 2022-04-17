@@ -2,7 +2,9 @@ const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
 const { PubSub } = require('graphql-subscriptions');
 const express = require('express');
-const http = require('http');
+const { createServer } = require('http');
+const { WebSocketServer } = require('ws');
+const { useServer } = require('graphql-ws/lib/use/ws');
 
 require('dotenv').config();
 
@@ -13,11 +15,29 @@ const pubSub = new PubSub();
 
 async function startApolloServer(schema) {
 	const app = express();
-	const httpServer = http.createServer(app);
+	const httpServer = createServer(app);
+
+	const wsServer = new WebSocketServer({
+		server: httpServer,
+		path: '/',
+	});
+
+	const serverCleanup = useServer({ schema }, wsServer);
 
 	const server = new ApolloServer({
 		schema,
-		plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+		plugins: [
+			ApolloServerPluginDrainHttpServer({ httpServer }),
+			{
+				async serverWillStart() {
+					return {
+						async drainServer() {
+							await serverCleanup.dispose();
+						},
+					};
+				},
+			},
+		],
 		cors: true,
 		introspection: true,
 		tracing: true,
@@ -29,7 +49,6 @@ async function startApolloServer(schema) {
 	await server.start();
 	server.applyMiddleware({
 		app,
-		path: '/',
 		cors: true,
 	});
 
