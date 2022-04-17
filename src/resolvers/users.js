@@ -9,7 +9,7 @@ const {
 } = require('../utils/validators');
 const logger = require('../config/logger');
 
-const UserResolvers = {
+const usersResolvers = {
 	Mutation: {
 		register: async (_, args) => {
 			try {
@@ -107,4 +107,4 @@ const UserResolvers = {
 	},
 };
 
-module.exports = { UserResolvers };
+module.exports = { usersResolvers };

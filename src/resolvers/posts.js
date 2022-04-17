@@ -3,7 +3,7 @@ const Post = require('../models/Post');
 
 const { checkAuth } = require('../utils/check-auth');
 
-const PostResolvers = {
+const postsResolvers = {
 	Query: {
 		getPosts: async () => {
 			try {
@@ -28,19 +28,18 @@ const PostResolvers = {
 	},
 	Mutation: {
 		createPost: async (_, args, context) => {
-			console.log(context.pubSub);
 			const { body } = args;
-			const user = checkAuth(context);
+			const { id, username } = checkAuth(context);
 
 			const post = new Post({
 				body,
-				user: user.id,
-				username: user.username,
+				user: id,
+				username,
 				createdAt: new Date().toISOString(),
 			});
 
-			const savedPost = await post.save();
-			return savedPost;
+			await post.save();
+			return post;
 		},
 		deletePost: async (_, args, context) => {
 			const { postId } = args;
@@ -59,4 +58,4 @@ const PostResolvers = {
 		},
 	},
 };
-module.exports = { PostResolvers };
+module.exports = { postsResolvers };

@@ -1,6 +1,6 @@
-const Hello = {
+const helloResolvers = {
 	Query: {
 		hello: () => 'Hello World!',
 	},
 };
-module.exports = { Hello };
+module.exports = { helloResolvers };

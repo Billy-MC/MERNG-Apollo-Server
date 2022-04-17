@@ -5,14 +5,31 @@ type Query {
 	getPost(postId: ID!): Post!
 }
 
+type Mutation {
+	createPost(body: String!): Post!
+	deletePost(postId: ID!): String!
+	createComment(postId: String!, body: String!): Post!
+	deleteComment(postId: String!, commentId: ID!): Post!
+	likePost(postId: ID!): Post!
+}
+
 type Post {
 	id: ID!
 	body: String!
 	createdAt: String!
 	username: String!
+	comment: [Comment]!
+	likes: [Like]!
+}
+type Comment {
+	id: ID!
+	createdAt: String!
+	username: String!
+	body: String!
 }
 
-type Mutation {
-	createPost(body: String!): Post!
-	deletePost(postId: ID!): String!
+type Like {
+	id: ID!
+	createdAt: String!
+	username: String!
 }

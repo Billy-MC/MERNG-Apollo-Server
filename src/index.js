@@ -9,6 +9,7 @@ const schema = loadSchemaSync('./**/*.graphql', {
 	loaders: [new GraphQLFileLoader()],
 });
 
+// Create the schema, which will be used separately by ApolloServer and the WebSocket server.
 const schemaWithResolvers = addResolversToSchema({
 	schema,
 	resolvers,

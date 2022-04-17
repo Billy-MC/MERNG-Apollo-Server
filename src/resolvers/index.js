@@ -1,15 +1,17 @@
-const { Hello } = require('./hello');
-const { PostResolvers } = require('./post');
-const { UserResolvers } = require('./user');
+const { helloResolvers } = require('./hello');
+const { postsResolvers } = require('./posts');
+const { usersResolvers } = require('./users');
+const { commentsResolvers } = require('./comments');
 
 const resolvers = {
 	Query: {
-		...Hello.Query,
-		...PostResolvers.Query,
+		...helloResolvers.Query,
+		...postsResolvers.Query,
 	},
 	Mutation: {
-		...UserResolvers.Mutation,
-		...PostResolvers.Mutation,
+		...usersResolvers.Mutation,
+		...postsResolvers.Mutation,
+		...commentsResolvers.Mutation,
 	},
 };
 
