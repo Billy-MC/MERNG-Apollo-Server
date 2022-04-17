@@ -1,6 +1,5 @@
 const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
-const { PubSub } = require('graphql-subscriptions');
 const express = require('express');
 const { createServer } = require('http');
 const { WebSocketServer } = require('ws');
@@ -14,8 +13,6 @@ async function startApolloServer(schema) {
 	const app = express();
 	const httpServer = createServer(app);
 	const PORT = 4000;
-
-	const pubSub = new PubSub();
 
 	// Create a WebSocketServer to use as your subscription server.
 	const wsServer = new WebSocketServer({
@@ -42,7 +39,7 @@ async function startApolloServer(schema) {
 		cors: true,
 		introspection: true,
 		tracing: true,
-		context: ({ req }) => ({ req, pubSub }),
+		context: ({ req }) => ({ req }),
 	});
 
 	connectToMongoDB();

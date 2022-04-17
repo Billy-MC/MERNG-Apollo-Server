@@ -13,6 +13,9 @@ const resolvers = {
 		...postsResolvers.Mutation,
 		...commentsResolvers.Mutation,
 	},
+	Subscription: {
+		...postsResolvers.Subscription,
+	},
 };
 
 module.exports = { resolvers };

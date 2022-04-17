@@ -11,7 +11,7 @@ const postSchema = new Schema({
 			createdAt: Date,
 		},
 	],
-	like: [
+	likes: [
 		{
 			username: String,
 			createdAt: Date,

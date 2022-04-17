@@ -31,6 +31,29 @@ const commentsResolvers = {
 			await post.save();
 			return post;
 		},
+		deleteComment: async (_, args, context) => {
+			const { postId, commentId } = args;
+			const { username } = checkAuth(context);
+			const post = await Post.findById(postId);
+
+			if (!post) {
+				throw new UserInputError('Post not found!!');
+			}
+
+			const commentIndex = post.comments.findIndex(
+				comment => comment.id === commentId
+			);
+			if (commentIndex < 0) {
+				throw new UserInputError('Comment not found!!');
+			}
+			if (post.comments[commentIndex]?.username !== username) {
+				throw new AuthenticationError('Action not allowed!!');
+			}
+
+			post.comments.splice(commentIndex, 1);
+			await post.save();
+			return post;
+		},
 	},
 };
 

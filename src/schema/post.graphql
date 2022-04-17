@@ -13,12 +13,16 @@ type Mutation {
 	likePost(postId: ID!): Post!
 }
 
+type Subscription {
+	newPost: Post!
+}
+
 type Post {
 	id: ID!
 	body: String!
 	createdAt: String!
 	username: String!
-	comment: [Comment]!
+	comments: [Comment!]!
 	likes: [Like]!
 }
 type Comment {

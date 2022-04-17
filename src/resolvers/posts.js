@@ -1,7 +1,15 @@
-const { AuthenticationError } = require('apollo-server-express');
+const { PubSub } = require('graphql-subscriptions');
+
+const {
+	AuthenticationError,
+	UserInputError,
+} = require('apollo-server-express');
+
 const Post = require('../models/Post');
 
 const { checkAuth } = require('../utils/check-auth');
+
+const pubsub = new PubSub();
 
 const postsResolvers = {
 	Query: {
@@ -39,6 +47,7 @@ const postsResolvers = {
 			});
 
 			await post.save();
+			pubsub.publish('NEW_POST', { newPost: post });
 			return post;
 		},
 		deletePost: async (_, args, context) => {
@@ -55,6 +64,33 @@ const postsResolvers = {
 			} catch (err) {
 				throw new Error(err);
 			}
+		},
+		likePost: async (_, args, context) => {
+			const { postId } = args;
+			const { username } = checkAuth(context);
+			const post = await Post.findById(postId);
+
+			if (!post) {
+				throw new UserInputError('Post not found!');
+			}
+
+			const likedPeople = post.likes.find(like => like.username === username);
+
+			if (!likedPeople) {
+				// like the post
+				post.likes.push({ username, createdAt: new Date().toISOString() });
+			} else {
+				// unlike the liked post!
+				post.likes = post.likes.filter(like => like.username !== username);
+			}
+
+			await post.save();
+			return post;
+		},
+	},
+	Subscription: {
+		newPost: {
+			subscribe: () => pubsub.asyncIterator('NEW_POST'),
 		},
 	},
 };
