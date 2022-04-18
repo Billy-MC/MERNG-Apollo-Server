@@ -39,6 +39,10 @@ const postsResolvers = {
 			const { body } = args;
 			const { id, username } = checkAuth(context);
 
+			if (body.trim() === '') {
+				throw new Error('Post body must not be empty');
+			}
+
 			const post = new Post({
 				body,
 				user: id,
