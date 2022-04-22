@@ -13,22 +13,23 @@ const pubsub = new PubSub();
 
 const postsResolvers = {
 	Query: {
-		getPosts: async () => {
-			try {
-				const posts = await Post.find().sort({ createdAt: -1 });
-				return posts;
-			} catch (err) {
-				throw new Error(err);
-			}
-		},
-		getPost: async (_, args) => {
+		getPosts: async (_, args) => {
 			const { postId } = args;
+			if (!postId) {
+				try {
+					const posts = await Post.find().sort({ createdAt: -1 });
+					return posts;
+				} catch (err) {
+					throw new Error(err);
+				}
+			}
 			try {
 				const post = await Post.findById(postId);
 				if (!post) {
 					throw new Error('Post not found!');
 				}
-				return post;
+
+				return [post];
 			} catch (err) {
 				throw new Error(err);
 			}

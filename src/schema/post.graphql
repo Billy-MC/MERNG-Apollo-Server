@@ -1,8 +1,7 @@
 # scalar Date
 
 type Query {
-	getPosts: [Post!]
-	getPost(postId: ID!): Post!
+	getPosts(postId: ID): [Post!]!
 }
 
 type Mutation {
