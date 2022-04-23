@@ -1,30 +1,30 @@
 {
-	"env": {
-		"browser": true,
-		"commonjs": true,
-		"es2021": true,
-		"node": true
-	},
-	"extends": ["airbnb-base", "prettier", "eslint:recommended"],
-	"parserOptions": {
-		"ecmaVersion": "latest"
-	},
-	"rules": {
-		"no-unused-vars": "warn",
-		"no-underscore-dangle": ["error"]
-	},
-	"overrides": [
-		{
-			"files": ["*.graphql"],
-			"parser": "@graphql-eslint/eslint-plugin",
-			"plugins": ["@graphql-eslint"],
-			"rules": {
-				"@graphql-eslint/known-type-names": "error"
-			},
-			"parserOptions": {
-				"operations": "./src/**/*.graphql",
-				"schema": "./src/**/*.graphql"
-			}
-		}
-	]
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es2021": true,
+        "node": true
+    },
+    "extends": ["airbnb-base", "prettier", "eslint:recommended"],
+    "parserOptions": {
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "no-unused-vars": "warn",
+        "no-underscore-dangle": ["error"]
+    },
+    "overrides": [
+        {
+            "files": ["*.graphql"],
+            "parser": "@graphql-eslint/eslint-plugin",
+            "plugins": ["@graphql-eslint", "prettier"],
+            "rules": {
+                "@graphql-eslint/known-type-names": "error"
+            },
+            "parserOptions": {
+                "operations": "./src/**/*.graphql",
+                "schema": "./src/**/*.graphql"
+            }
+        }
+    ]
 }
