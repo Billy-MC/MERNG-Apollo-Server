@@ -12,7 +12,7 @@ const logger = require('./config/logger');
 async function startApolloServer(schema) {
 	const app = express();
 	const httpServer = createServer(app);
-	const PORT = 4000;
+	const PORT = process.env.PORT || 4000;
 
 	// Create a WebSocketServer to use as your subscription server.
 	const wsServer = new WebSocketServer({
